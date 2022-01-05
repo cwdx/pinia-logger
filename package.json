@@ -1,0 +1,24 @@
+{
+  "name": "pinia-logger",
+  "version": "1.0.3",
+  "description": "Lightweight logger for Pinia",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cwdx/pinia-logger"
+  },
+  "scripts": {
+    "build": "tsc -p . && cp package.json dist && cp README.md dist",
+    "deploy": "yarn version && npm run build && cd dist && npm publish"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "pinia": "^2.0.9"
+  },
+  "devDependencies": {
+    "eslint": "^7.30.0",
+    "typescript": "^4.3.5"
+  }
+}
