@@ -2,3 +2,5 @@
 .env
 /dist
 .DS_Store
+/test/node_modules
+/test/dist
