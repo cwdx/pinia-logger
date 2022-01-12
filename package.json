@@ -1,6 +1,6 @@
 {
   "name": "pinia-logger",
-  "version": "1.1.1",
+  "version": "1.3.0",
   "description": "Lightweight logger for Pinia",
   "main": "index.js",
   "types": "index.d.ts",
@@ -9,6 +9,8 @@
     "url": "https://github.com/cwdx/pinia-logger"
   },
   "scripts": {
+    "postinstall": "cd tests && yarn install",
+    "dev": "cd tests && yarn dev",
     "build": "tsc -p . && cp package.json dist && cp README.md dist",
     "deploy": "yarn version && npm run build && cd dist && npm publish"
   },
