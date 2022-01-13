@@ -22,7 +22,7 @@ const pinia = createPinia();
 //   logErrors: true,
 //   disabled: false,
 //   expanded: true,
-//   showStoreName: false,
+//   showStoreName: true,
 //   showDuration: false
 // }
 

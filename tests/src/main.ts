@@ -9,6 +9,6 @@ app.use(createPinia().use(PiniaLogger({
     expanded: true,
     showStoreName: true,
     showDuration: true,
-    logErrors: true
+    logErrors: true,
 })));
 app.mount("#app");

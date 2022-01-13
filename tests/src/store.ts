@@ -6,26 +6,26 @@ interface State {
 
 export const useStore = defineStore("main", {
   state: (): State => ({
-    messages: []
+    messages: [],
   }),
   actions: {
     ADD_MESSAGE(value: string) {
       this.messages = [value, ...this.messages];
     },
     ADD_ASYNC_MESSAGE(value: string) {
-      return new Promise(res => {
+      return new Promise((res) => {
         setTimeout(() => {
           this.messages = [value, ...this.messages];
           res(true);
-        },100)
-      })
+        }, 100);
+      });
     },
     MOCK_ERROR() {
       return new Promise((_, rej) => {
         setTimeout(() => {
           rej(false);
-        },100)
-      })
+        }, 100);
+      });
     },
-  }
-})
+  },
+});
