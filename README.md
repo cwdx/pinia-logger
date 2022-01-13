@@ -1,15 +1,12 @@
 # Pinia Logger
 
-## Demo
-![Screenshot](https://i.ibb.co/CWsLJh8/Screenshot-2022-01-05-at-08-56-40.png)
-
 ## Installation
 ```bash
 yarn add pinia-logger
 ```
 or
 ```bash
-npm npm install pinia-logger --save-dev
+npm install pinia-logger --save-dev
 ```
 
 ## Configuration example
@@ -48,6 +45,9 @@ export interface PiniaLoggerOptions {
   logErrors?: boolean;
 }
 ```
+
+## Demo
+![Screenshot](https://raw.githubusercontent.com/cwdx/pinia-logger/main/demo.png)
 
 ## Links
 - [https://github.com/cwdx/pinia-logger](https://github.com/cwdx/pinia-logger)
