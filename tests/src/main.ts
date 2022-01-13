@@ -5,10 +5,5 @@ import { PiniaLogger } from '../../src';
 
 
 const app = createApp(App);
-app.use(createPinia().use(PiniaLogger({
-    expanded: true,
-    showStoreName: true,
-    showDuration: true,
-    logErrors: true
-})));
+app.use(createPinia().use(PiniaLogger()));
 app.mount("#app");
