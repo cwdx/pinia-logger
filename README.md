@@ -9,9 +9,13 @@ or
 npm install pinia-logger --save-dev
 ```
 
+## Demo
+![Screenshot](https://raw.githubusercontent.com/cwdx/pinia-logger/main/demo.png)
+
 ## Configuration example
 ```ts
 import { PiniaLogger } from "pinia-logger";
+
 const pinia = createPinia();
 
 // Defaults are:
@@ -28,7 +32,6 @@ pinia.use(PiniaLogger({
   disabled: process.env.mode === "production"
 }))
 
-pinia.use(piniaPluginPersistedstate)
 app.use(pinia)
 ```
 
@@ -45,9 +48,6 @@ export interface PiniaLoggerOptions {
   logErrors?: boolean;
 }
 ```
-
-## Demo
-![Screenshot](https://raw.githubusercontent.com/cwdx/pinia-logger/main/demo.png)
 
 ## Links
 - [https://github.com/cwdx/pinia-logger](https://github.com/cwdx/pinia-logger)
