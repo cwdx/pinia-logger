@@ -30,7 +30,7 @@ const pinia = createPinia();
 pinia.use(PiniaLogger({
   expanded: true,
   disabled: process.env.mode === "production",
-  filter: ( { action } ) => action !== 'incrementCounter' 
+  filter: ( { action } ) => action.name !== 'incrementCounter' 
 }))
 
 app.use(pinia)
