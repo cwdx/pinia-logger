@@ -22,6 +22,7 @@ export interface PiniaLoggerOptions {
   showDuration?: boolean
   showStoreName?: boolean;
   logErrors?: boolean;
+  filter?: (action: PiniaActionListenerContext) => boolean
 }
 
 export type PiniaActionListenerContext = _StoreOnActionListenerContext<StoreGeneric, string, _ActionsTree>;
@@ -32,6 +33,7 @@ const defaultOptions: PiniaLoggerOptions = {
   expanded: true,
   showStoreName: true,
   showDuration: false,
+  filter: () => true,
 };
 
 export const PiniaLogger = (config = defaultOptions) => (ctx: PiniaPluginContext) => {
@@ -53,7 +55,7 @@ export const PiniaLogger = (config = defaultOptions) => (ctx: PiniaPluginContext
       const nextState = cloneDeep(ctx.store.$state);
       const storeName = action.store.$id;
       const title = `action 🍍 ${options.showStoreName ? `[${storeName}] ` : ''}${action.name} ${isError ? `failed after ${duration} ` : ''}@ ${formatTime()}`;
-
+      
       console[options.expanded ? 'group' : 'groupCollapsed'](`%c${title}`, `font-weight: bold; ${isError ? 'color: #ed4981;' : ''}`);
       console.log('%cprev state', 'font-weight: bold; color: grey;', prevState);
       console.log('%caction', 'font-weight: bold; color: #69B7FF;', {
@@ -68,6 +70,13 @@ export const PiniaLogger = (config = defaultOptions) => (ctx: PiniaPluginContext
     };
 
     action.after(() => {
+      const value = options.filter && options.filter( action );
+      const canLog = typeof value === 'boolean' ? value : true;
+      
+      if( !canLog ) {
+        return;
+      }
+
       log();
     });
 
