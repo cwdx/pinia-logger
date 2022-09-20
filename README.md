@@ -1,18 +1,23 @@
 # Pinia Logger
 
 ## Installation
+
 ```bash
 yarn add pinia-logger
 ```
+
 or
+
 ```bash
 npm install pinia-logger --save-dev
 ```
 
 ## Demo
+
 ![Screenshot](https://raw.githubusercontent.com/cwdx/pinia-logger/main/demo.png)
 
 ## Configuration example
+
 ```ts
 import { PiniaLogger } from "pinia-logger";
 
@@ -24,19 +29,23 @@ const pinia = createPinia();
 //   disabled: false,
 //   expanded: true,
 //   showStoreName: true,
-//   showDuration: false
+//   showDuration: false,
+//   filter: () => true
 // }
 
-pinia.use(PiniaLogger({
-  expanded: true,
-  disabled: process.env.mode === "production",
-  filter: ({ action }) => action.name !== 'incrementCounter' 
-}))
+pinia.use(
+  PiniaLogger({
+    expanded: true,
+    disabled: process.env.mode === "production",
+    filter: ({ name }) => name !== "incrementCounter",
+  })
+);
 
-app.use(pinia)
+app.use(pinia);
 ```
 
 ## Typescript
+
 ```ts
 import { PiniaLoggerOptions }
 
@@ -52,5 +61,6 @@ export interface PiniaLoggerOptions {
 ```
 
 ## Links
+
 - [https://github.com/cwdx/pinia-logger](https://github.com/cwdx/pinia-logger)
 - [https://www.npmjs.com/package/pinia-logger](https://www.npmjs.com/package/pinia-logger)
