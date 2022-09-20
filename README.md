@@ -29,7 +29,8 @@ const pinia = createPinia();
 
 pinia.use(PiniaLogger({
   expanded: true,
-  disabled: process.env.mode === "production"
+  disabled: process.env.mode === "production",
+  filter: ({ action }) => action.name !== 'incrementCounter' 
 }))
 
 app.use(pinia)
@@ -46,6 +47,7 @@ export interface PiniaLoggerOptions {
   showDuration?: boolean;
   showStoreName?: boolean;
   logErrors?: boolean;
+  filter?: (action: PiniaActionListenerContext) => boolean;
 }
 ```
 
