@@ -72,12 +72,12 @@ export const PiniaLogger =
 
         console[options.expanded ? "group" : "groupCollapsed"](
           `%c${title}`,
-          `font-weight: bold; ${isError ? "color: #ed4981;" : ""}`
+          `font-weight: bold; ${isError ? "color: #ed4981;" : ""}`,
         );
         console.log(
           "%cprev state",
           "font-weight: bold; color: grey;",
-          prevState
+          prevState,
         );
         console.log("%caction", "font-weight: bold; color: #69B7FF;", {
           type: action.name,
@@ -89,15 +89,14 @@ export const PiniaLogger =
         console.log(
           "%cnext state",
           "font-weight: bold; color: #4caf50;",
-          nextState
+          nextState,
         );
         console.groupEnd();
       };
 
       action.after(() => {
-        const canLog = options.filter && options.filter(action);
-        if (canLog !== true) return;
-        log();
+        const canLog = (options.filter && options.filter(action)) ?? false;
+        if (canLog) log();
       });
 
       if (options.logErrors) {
