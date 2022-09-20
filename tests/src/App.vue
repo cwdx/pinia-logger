@@ -7,8 +7,9 @@
     </label>
 
     <button type="submit">Add Message</button>
-    <button type="button" @click="store.MOCK_ERROR()">Mock Error</button>
+    <button type="button" @click="store.mockError()">Mock Error</button>
   </form>
+  <div class="counter">Count: {{store.count}} <button @click="store.incrementCounter">increment</button></div>
   <div v-for="(msg, i) of store.messages" :key="i" class="msg">{{ msg }}</div>
 </template>
 
@@ -23,9 +24,9 @@ const promise = ref(false);
 const submit = () => {
   if (!form.value) return;
   if (promise.value) {
-    store.ADD_ASYNC_MESSAGE(form.value);
+    store.addAsyncMessage(form.value);
   } else {
-    store.ADD_MESSAGE(form.value);
+    store.addMessage(form.value);
   }
 }
 </script>
@@ -54,10 +55,17 @@ button {
   font: inherit;
 }
 
-.msg {
+.msg, .counter {
   border: 1px solid lightgray;
   margin-bottom: 1rem;
   border-radius: 5px;
   padding: 0.75rem;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+.counter button {
+  margin-left: auto;
 }
 </style>

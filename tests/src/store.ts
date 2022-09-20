@@ -2,17 +2,19 @@ import { defineStore } from "pinia";
 
 interface State {
   messages: string[];
+  count: number;
 }
 
 export const useStore = defineStore("main", {
   state: (): State => ({
     messages: [],
+    count: 0,
   }),
   actions: {
-    ADD_MESSAGE(value: string) {
+    addMessage(value: string) {
       this.messages = [value, ...this.messages];
     },
-    ADD_ASYNC_MESSAGE(value: string) {
+    addAsyncMessage(value: string) {
       return new Promise((res) => {
         setTimeout(() => {
           this.messages = [value, ...this.messages];
@@ -20,12 +22,15 @@ export const useStore = defineStore("main", {
         }, 100);
       });
     },
-    MOCK_ERROR() {
+    mockError() {
       return new Promise((_, rej) => {
         setTimeout(() => {
           rej(false);
         }, 100);
       });
+    },
+    incrementCounter() {
+      this.count++;
     },
   },
 });
