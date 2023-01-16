@@ -130,14 +130,13 @@ export interface PiniaLoggerOptions {
 
 ## Change log
 
-**1.3.7** - 2023-01-16
+**1.3.8** - 2023-01-16
 - Enhancement: remove cloneDeep function in favor of `{...foo}`
 - Fix: eslint errors
 - Fix: set tsconfig option for exclude
 - New: added `showTime` option
 - New: added `actions` option
 - New: options can now also be set in the store using the `logger` property
-```
 
 **1.3.6** - 2022-09-20
 - New: added `filter` option. Use a filter function to only log certain actions
