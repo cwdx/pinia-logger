@@ -136,8 +136,6 @@ export const PiniaLogger =
       ...(typeof ctx.options.logger === "object" ? ctx.options.logger : {}),
     };
 
-    console.log(options);
-
     if (options.disabled || ctx.options.logger === false) return;
 
     ctx.store.$onAction((action: PiniaActionListenerContext) => {
