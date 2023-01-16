@@ -130,7 +130,7 @@ export interface PiniaLoggerOptions {
 
 ## Change log
 
-**1.3.8** - 2023-01-16
+**1.3.9** - 2023-01-16
 
 - Enhancement: remove cloneDeep function in favor of `{...foo}`
 - Enhancement: moved "pinia" to devDependencies
