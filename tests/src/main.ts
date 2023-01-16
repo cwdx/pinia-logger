@@ -9,7 +9,7 @@ const pinia = createPinia();
 pinia.use(
   PiniaLogger({
     filter: (action) => action.name !== "incrementCounter",
-  }),
+  })
 );
 
 app.use(pinia);

@@ -2,33 +2,43 @@
   <h1>Pinia Logger Test</h1>
   <form @submit.prevent="submit">
     <input v-model="form" placeholder="Set message" />
-    <label>
-      <input type="checkbox" v-model="promise" />async
-    </label>
+    <label> <input type="checkbox" v-model="promise" />async </label>
 
     <button type="submit">Add Message</button>
-    <button type="button" @click="store.mockError()">Mock Error</button>
+    <button type="button" @click="mainStore.mockError()">Mock Error</button>
   </form>
-  <div class="counter">Count: {{store.count}} <button @click="store.incrementCounter">increment</button></div>
-  <div v-for="(msg, i) of store.messages" :key="i" class="msg">{{ msg }}</div>
+  <div class="counter">
+    Count: {{ mainStore.count }}
+    <button @click="mainStore.incrementCounter">increment</button>
+  </div>
+  <div v-for="(msg, i) of mainStore.messages" :key="i" class="msg">
+    {{ msg }}
+  </div>
+
+  <h2>Test store with custom `logger` options</h2>
+  Count: {{ counterSetupStore.count }}<br />
+  <button @click="counterSetupStore.increment">+</button>
+  <button @click="counterSetupStore.decrement">-</button>
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
-import { useStore } from './store';
+import { ref } from "vue";
+import { useMainStore } from "./store/main";
+import { useCounterSetupStore } from "./store/counter-setup";
 
-const store = useStore();
+const mainStore = useMainStore();
+const counterSetupStore = useCounterSetupStore();
 const form = ref("Test message");
 const promise = ref(false);
 
 const submit = () => {
   if (!form.value) return;
   if (promise.value) {
-    store.addAsyncMessage(form.value);
+    mainStore.addAsyncMessage(form.value);
   } else {
-    store.addMessage(form.value);
+    mainStore.addMessage(form.value);
   }
-}
+};
 </script>
 
 <style>
@@ -55,7 +65,8 @@ button {
   font: inherit;
 }
 
-.msg, .counter {
+.msg,
+.counter {
   border: 1px solid lightgray;
   margin-bottom: 1rem;
   border-radius: 5px;
