@@ -1,6 +1,6 @@
 # Pinia Logger
 
-_For **Nuxt** users, see [pinia-logger-nuxt](https://www.npmjs.com/package/pinia-logger-nuxt)_
+_For **Nuxt** users, see [pinia-logger-nuxt](README-nuxt.md)_
 
 ## Installation
 
