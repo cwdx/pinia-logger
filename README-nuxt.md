@@ -27,5 +27,8 @@ export default defineNuxtConfig({
   },
 });
 
-// see https://www.npmjs.com/package/pinia-logger for more options
 ```
+
+## Options
+
+see [pinia-logger](README.md) for more options
