@@ -1,6 +1,6 @@
 {
   "name": "pinia-logger",
-  "version": "1.3.11",
+  "version": "1.3.12",
   "description": "Lightweight logger for Pinia",
   "main": "index.js",
   "types": "index.d.ts",
@@ -22,7 +22,7 @@
   "scripts": {
     "dev": "cd tests && npm run dev",
     "lint": "eslint --ext .js,.ts,.vue src tests --fix && prettier --write src tests",
-    "build": "npm run lint && tsc -p . && cp package.json dist && cp README.md dist",
+    "build": "npm run lint && tsc -p . && cp package.json dist && cp README.md dist && cp README-nuxt.md dist",
     "build:nuxt": "rm -rf packages/nuxt && mkdir -p packages/nuxt && npm run build && cp dist/nuxt.js packages/nuxt/index.js && cp dist/nuxt.d.ts packages/nuxt/index.d.ts && cp dist/nuxt.js.map packages/nuxt/index.js.map && cp README.md packages/nuxt/README.md && cp package.json packages/nuxt/package.json",
     "install:tests": "cd tests && npm install",
     "deploy": "npm run build && cd dist && npm publish"

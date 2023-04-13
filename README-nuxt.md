@@ -1,7 +1,7 @@
 # Pinia Logger Nuxt Plugin
 
-This is a Nuxt plugin for [pinia-logger](https://www.npmjs.com/package/pinia-logger).
-It is a wrapper around the pinia-logger plugin that adds Nuxt specific features.
+This is a Nuxt plugin for [pinia-logger](README.md)
+It's a wrapper around the pinia-logger plugin that adds Nuxt specific features.
 
 ```bash
 yarn add @pinia/nuxt
@@ -26,7 +26,6 @@ export default defineNuxtConfig({
     showPineapple: false,
   },
 });
-
 ```
 
 ## Options

@@ -1,8 +1,9 @@
 {
   "name": "pinia-logger-nuxt",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "license": "MIT",
   "type": "module",
+  "homepage": "https://github.com/cwdx/pinia-logger/blob/main/README-nuxt.md",
   "exports": {
     ".": {
       "types": "./dist/types.d.ts",

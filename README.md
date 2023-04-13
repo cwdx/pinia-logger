@@ -20,9 +20,10 @@ npm install pinia-logger --save-dev
 
 ## Examples
 
-- [main.ts](tests/src/main.ts)
-- [store/main.ts](tests/src/store/main.ts)
-- [store/counter-setup.ts](tests/src/store/counter-setup.ts)
+- [main.ts](tests/plugin/src/main.ts)
+- [store/main.ts](tests/plugin/src/store/main.ts)
+- [store/counter-setup.ts](tests/plugin/src/store/counter-setup.ts)
+- [Nuxt](tests/nuxt/nuxt.config.ts)
 
 ## Configuration example
 
