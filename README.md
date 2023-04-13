@@ -1,5 +1,7 @@
 # Pinia Logger
 
+_For **Nuxt** users, see [pinia-logger-nuxt](https://www.npmjs.com/package/pinia-logger-nuxt)_
+
 ## Installation
 
 ```bash

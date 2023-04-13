@@ -198,4 +198,6 @@ export const PiniaLogger =
     });
   };
 
+export * from "./nuxt";
+
 export default PiniaLogger;

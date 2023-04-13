@@ -11,7 +11,9 @@
     "logger",
     "log",
     "console",
-    "typescript"
+    "typescript",
+    "nuxt",
+    "vue"
   ],
   "repository": {
     "type": "git",
@@ -21,23 +23,26 @@
     "dev": "cd tests && npm run dev",
     "lint": "eslint --ext .js,.ts,.vue src tests --fix && prettier --write src tests",
     "build": "npm run lint && tsc -p . && cp package.json dist && cp README.md dist",
+    "build:nuxt": "rm -rf packages/nuxt && mkdir -p packages/nuxt && npm run build && cp dist/nuxt.js packages/nuxt/index.js && cp dist/nuxt.d.ts packages/nuxt/index.d.ts && cp dist/nuxt.js.map packages/nuxt/index.js.map && cp README.md packages/nuxt/README.md && cp package.json packages/nuxt/package.json",
     "install:tests": "cd tests && npm install",
     "deploy": "npm run build && cd dist && npm publish"
   },
   "author": "",
   "license": "ISC",
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
+    "@nuxt/types": "^2.16.3",
+    "@rushstack/eslint-patch": "^1.2.0",
     "@typescript-eslint/eslint-plugin": "^5.48.1",
     "@typescript-eslint/parser": "^5.48.1",
     "@vue/eslint-config-prettier": "^7.0.0",
+    "@vue/eslint-config-typescript": "^11.0.2",
     "eslint": "^8.32.0",
     "eslint-plugin-vue": "^9.9.0",
+    "nuxt": "^3.4.0",
+    "pinia": "^2.0.29",
+    "pinia-logger": "^1.3.11",
     "prettier": "^2.8.3",
-    "typescript": "^4.9.4",
-    "@rushstack/eslint-patch": "^1.2.0",
-    "@vue/eslint-config-typescript": "^11.0.2",
-    "pinia": "^2.0.29"
+    "typescript": "^4.9.4"
   }
 }

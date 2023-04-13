@@ -1,0 +1,11 @@
+// extend tsconfig
+{
+  "extends": "./tsconfig.json",
+  "include": ["./src/nuxt.ts"],
+  "exclude": ["node_modules", "dist"],
+  "compilerOptions": {
+    "outDir": "./dist/packages/nuxt",
+    "types": ["@nuxt/types"],
+    "declaration": true,
+  }
+}
