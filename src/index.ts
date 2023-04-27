@@ -17,6 +17,13 @@ const formatTime = (date = new Date()) => {
 
 type KeyOfStoreActions<Store> = keyof StoreActions<Store>;
 
+interface Logger extends Partial<Pick<Console, 'groupCollapsed' | 'group' | 'groupEnd'>> {
+  log(message: string, color?: string, payload?: any): void;
+  group(message: string, color?: string, payload?: any): void;
+  groupCollapsed(message: string, color?: string, payload?: any): void;
+  groupEnd(): void;
+}
+
 export interface PiniaLoggerOptions {
   /**
    * @default true
@@ -74,6 +81,12 @@ export interface PiniaLoggerOptions {
    * @description If undefined, all actions will be logged
    */
   actions?: KeyOfStoreActions<StoreGeneric>[];
+  /**
+   * @default console
+   * @description Define custom log function
+   * @description If undefined, console will be used
+   */
+  logger?: Logger;
 }
 
 const defaultOptions: PiniaLoggerOptions = {
@@ -136,6 +149,8 @@ export const PiniaLogger =
       ...(typeof ctx.options.logger === "object" ? ctx.options.logger : {}),
     };
 
+    const logger = config.logger || console;
+
     if (options.disabled || ctx.options.logger === false) return;
 
     ctx.store.$onAction((action: PiniaActionListenerContext) => {
@@ -161,28 +176,28 @@ export const PiniaLogger =
             : ""
         }${options.showTime ? `@ ${formatTime()}` : ""}`;
 
-        console[options.expanded ? "group" : "groupCollapsed"](
+        logger[options.expanded ? "group" : "groupCollapsed"](
           `%c${title}`,
           `font-weight: bold; ${isError ? "color: #ed4981;" : ""}`
         );
-        console.log(
+        logger.log(
           "%cprev state",
           "font-weight: bold; color: grey;",
           prevState
         );
-        console.log("%caction", "font-weight: bold; color: #69B7FF;", {
+        logger.log("%caction", "font-weight: bold; color: #69B7FF;", {
           type: action.name,
           args: action.args.length > 0 ? { ...action.args } : undefined,
           ...(options.showStoreName && { store: action.store.$id }),
           ...(options.showDuration && { duration }),
           ...(isError && { error }),
         });
-        console.log(
+        logger.log(
           "%cnext state",
           "font-weight: bold; color: #4caf50;",
           nextState
         );
-        console.groupEnd();
+        logger.groupEnd();
       };
 
       action.after(() => {

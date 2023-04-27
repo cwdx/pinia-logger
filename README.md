@@ -42,6 +42,7 @@ const pinia = createPinia();
 //   showTime: true,
 //   filter: () => true
 //   actions: undefined
+//   logger: console
 // }
 
 pinia.use(
@@ -128,6 +129,7 @@ export interface PiniaLoggerOptions {
   logErrors?: boolean;
   filter?: (action: PiniaActionListenerContext) => boolean;
   actions?: KeyOfStoreActions<Store>[]
+  logger?: Logger
 }
 ```
 
