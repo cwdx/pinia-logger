@@ -17,10 +17,11 @@ const formatTime = (date = new Date()) => {
 
 type KeyOfStoreActions<Store> = keyof StoreActions<Store>;
 
-interface Logger extends Partial<Pick<Console, 'groupCollapsed' | 'group' | 'groupEnd'>> {
-  log(message: string, color?: string, payload?: any): void;
-  group(message: string, color?: string, payload?: any): void;
-  groupCollapsed(message: string, color?: string, payload?: any): void;
+interface Logger
+  extends Partial<Pick<Console, "groupCollapsed" | "group" | "groupEnd">> {
+  log(message: string, color?: string, payload?: unknown): void;
+  group(message: string, color?: string, payload?: unknown): void;
+  groupCollapsed(message: string, color?: string, payload?: unknown): void;
   groupEnd(): void;
 }
 

@@ -1,6 +1,6 @@
 {
   "name": "pinia-logger-nuxt",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "license": "MIT",
   "type": "module",
   "homepage": "https://github.com/cwdx/pinia-logger/blob/main/README-nuxt.md",
@@ -13,6 +13,22 @@
   },
   "main": "./dist/module.cjs",
   "types": "./dist/types.d.ts",
+  "description": "Lightweight logger for Pinia",
+  "keywords": [
+    "pinia",
+    "store",
+    "vuex",
+    "logger",
+    "log",
+    "console",
+    "typescript",
+    "nuxt",
+    "vue"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cwdx/pinia-logger"
+  },
   "scripts": {
     "build": "nuxt-module-build --failOnWarn=false && cp package.json dist && cp README.md dist",
     "postbuild": "node postbuild.cjs",
