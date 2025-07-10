@@ -15,7 +15,7 @@ const moduleDef: NuxtModule<PiniaLoggerOptions & ModuleOptions> =
       name: "pinia-logger",
       configKey: "piniaLogger",
       compatibility: {
-        nuxt: "^2.0.0 || ^3.0.0-rc.5",
+        nuxt: "^2.0.0 || ^3.0.0-rc.5 || ^4.0.0-rc.0",
         bridge: true,
       },
     },
