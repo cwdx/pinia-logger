@@ -13,4 +13,5 @@ onMounted(() => counter.increment());
 
 <template>
   <button @click="counter.increment()">count {{ counter.count }}</button>
+  <NuxtPage />
 </template>

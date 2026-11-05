@@ -4,7 +4,8 @@
   "type": "module",
   "scripts": {
     "dev": "nuxt dev --host 127.0.0.1 --port 5198",
-    "lint": "oxlint --deny-warnings && oxfmt --check"
+    "lint": "oxlint --deny-warnings && oxfmt --check",
+    "typecheck": "nuxt typecheck --checker=golar"
   },
   "dependencies": {
     "@pinia/nuxt": "1.0.3",
@@ -12,5 +13,11 @@
     "pinia": "4.1.0",
     "pinia-logger": "workspace:*",
     "vue": "3.5.44"
+  },
+  "devDependencies": {
+    "@golar/vue": "0.1.11",
+    "golar": "0.1.11",
+    "typescript": "7.1.0-beta",
+    "vue-router": "^5.4.0"
   }
 }
