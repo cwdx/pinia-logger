@@ -1,15 +1,17 @@
 {
   "compilerOptions": {
-    "target": "es2017",
-    "module": "commonjs",
+    "target": "es2020",
+    "lib": ["es2022", "dom"],
+    "module": "preserve",
+    "moduleResolution": "bundler",
     "strict": true,
+    "isolatedDeclarations": true,
     "declaration": true,
-    "esModuleInterop": true,
+    "verbatimModuleSyntax": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "sourceMap": true,
-    "outDir": "./dist"
+    "noEmit": true,
+    "types": ["node"],
+    "paths": { "pinia-logger": ["./src/index.ts"], "pinia-logger/*": ["./src/*.ts"] }
   },
-  "include": ["./src"],
-  "exclude": ["node_modules", "dist"]
+  "include": ["src", "tests"]
 }

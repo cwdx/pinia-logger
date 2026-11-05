@@ -1,75 +1,40 @@
-# Pinia Logger
+# pinia-logger
 
-_For **Nuxt** users, see [pinia-logger-nuxt](README-nuxt.md)_
-
-## Installation
-
-```bash
-yarn add pinia-logger
-```
-
-or
-
-```bash
-npm install pinia-logger --save-dev
-```
-
-## Demo
+Logs Pinia actions to the console: the state before, the action with its arguments and result, and the state after. An optional plugin does the same for Pinia Colada queries and mutations.
 
 ![Screenshot](https://raw.githubusercontent.com/cwdx/pinia-logger/main/demo.png)
 
-## Examples
+## Install
 
-- [main.ts](tests/plugin/src/main.ts)
-- [store/main.ts](tests/plugin/src/store/main.ts)
-- [store/counter-setup.ts](tests/plugin/src/store/counter-setup.ts)
-- [Nuxt](tests/nuxt/nuxt.config.ts)
+```bash
+npm install --save-dev pinia-logger
+```
 
-## Configuration example
+Works with Pinia 2, 3 and 4, on Vue 2.7 or Vue 3.2 and later. ESM and CommonJS builds are included; the CommonJS build of `pinia-logger/colada` needs a Node version that can `require()` ES modules (20.19 or 22.12 and later), because `@pinia/colada` ships only ESM. Pinia Colada support needs `@pinia/colada` 0.12 or later; mutation logging needs 0.17.9 or later.
+
+## Stores
 
 ```ts
+import { createApp } from "vue";
+import { createPinia } from "pinia";
 import { PiniaLogger } from "pinia-logger";
 
 const pinia = createPinia();
-
-// Defaults are:
-// const defaultOptions = {
-//   logErrors: true,
-//   disabled: false,
-//   expanded: true,
-//   showStoreName: true,
-//   showDuration: false,
-//   showTime: true,
-//   filter: () => true
-//   actions: undefined
-//   logger: console
-// }
-
 pinia.use(
   PiniaLogger({
-    expanded: true,
-    disabled: process.env.mode === "production",
-    // use a filter to only log certain actions
+    expanded: false,
+    showDuration: true,
     filter: ({ name }) => name !== "incrementCounter",
-    // alternatively, you can specify the actions you want to log
-    // if undefined, all actions will be logged
-    actions: ["decrementCounter"],
-  })
+  }),
 );
-
-app.use(pinia);
+createApp(App).use(pinia);
 ```
 
-## Store configuration example
-
-You can also set the logger options in the store. For example:
+Override the options for one store, or turn it off with `logger: false`:
 
 ```ts
-export const useCounterStore = defineStore({
-  id: "counter",
-  state: () => ({
-    counter: 0,
-  }),
+export const useCounterStore = defineStore("counter", {
+  state: () => ({ counter: 0 }),
   actions: {
     incrementCounter() {
       this.counter++;
@@ -78,80 +43,86 @@ export const useCounterStore = defineStore({
       this.counter--;
     },
   },
-  // you can also set the logger options in the store
-  logger: {
-    expanded: true,
-    disabled: process.env.mode === "production",
-    // use a filter to only log certain actions
-    filter: ({ name }) => name !== "incrementCounter",
-    // alternatively, you can specify the actions you want to log
-    // if undefined, all actions will be logged
-    actions: ["decrementCounter"],
-  },
+  logger: { actions: ["decrementCounter"] },
 });
 
-// or using setup style store definition
-export const useCounterStore = defineStore(
-  "counter",
+export const useSetupStore = defineStore(
+  "setup",
   () => {
     const count = ref(0);
     const increment = () => count.value++;
-    const decrement = () => count.value--;
-    return {
-      count,
-      increment,
-      decrement,
-    };
+    return { count, increment };
   },
-  // use the third argument to set the logger options
-  {
-    logger: {
-      // only log the decrement action
-      actions: ["decrementCounter"],
-    },
-  }
+  { logger: false },
 );
 ```
 
-## Typescript
+## Pinia Colada
 
 ```ts
-import { PiniaLoggerOptions }
+import { PiniaColada } from "@pinia/colada";
+import { PiniaColadaLogger } from "pinia-logger/colada";
 
-// Options interface is:
-export interface PiniaLoggerOptions {
-  disabled?: boolean;
-  expanded?: boolean;
-  showDuration?: boolean;
-  showTime?: boolean;
-  showPineapple?: boolean;
-  showStoreName?: boolean;
-  logErrors?: boolean;
-  filter?: (action: PiniaActionListenerContext) => boolean;
-  actions?: KeyOfStoreActions<Store>[]
-  logger?: Logger
-}
+app.use(PiniaColada, {
+  plugins: [PiniaColadaLogger({ filter: ({ type }) => type !== "hit" })],
+});
 ```
 
-## Change log
+It logs one group per event, titled with the query or mutation key:
 
-**1.3.10** - 2023-01-16
+| Event        | When                                                                     |
+| ------------ | ------------------------------------------------------------------------ |
+| `fetch`      | A query ran, with the resulting state. `failed` or `cancelled` on error. |
+| `hit`        | `refresh()` returned fresh cached data without fetching.                 |
+| `set`        | `setQueryData()` wrote data.                                             |
+| `invalidate` | A query was invalidated.                                                 |
+| `remove`     | A query left the cache.                                                  |
+| `mutate`     | A mutation ran, with its variables and result. `failed` on error.        |
 
-- Enhancement: remove cloneDeep function in favor of `{...foo}`
-- Enhancement: moved "pinia" to devDependencies
-- Fix: eslint errors
-- Fix: set tsconfig option for exclude
-- New: added `showTime` option
-- New: added `actions` option
-- New: options can now also be set in the store using the `logger` property
+Colada's internal stores are skipped by the store logger.
 
-**1.3.6** - 2022-09-20
+## Nuxt
 
-- New: added `filter` option. Use a filter function to only log certain actions
+Nuxt 3 and 4 with `@pinia/nuxt` (tested on Nuxt 3.21 and 4.6):
 
----
+```ts
+export default defineNuxtConfig({
+  modules: ["@pinia/nuxt", "pinia-logger/nuxt"],
+  piniaLogger: { expanded: false },
+});
+```
 
-## Links
+The logger runs in the browser only. Options pass through the public runtime config, so `filter` and `logger` (functions) cannot be set here; use per-store options instead.
 
-- [https://github.com/cwdx/pinia-logger](https://github.com/cwdx/pinia-logger)
-- [https://www.npmjs.com/package/pinia-logger](https://www.npmjs.com/package/pinia-logger)
+## Options
+
+| Option          | Default                  | Store | Colada | Description                                                                    |
+| --------------- | ------------------------ | :---: | :----: | ------------------------------------------------------------------------------ |
+| `disabled`      | `true` in production     |   x   |   x    | Turn the logger off. Production means `process.env.NODE_ENV === "production"`. |
+| `expanded`      | `true`                   |   x   |   x    | `console.group` instead of `console.groupCollapsed`.                           |
+| `showDuration`  | `false` (Colada: `true`) |   x   |   x    | Append `in 12ms`.                                                              |
+| `showTime`      | `true`                   |   x   |   x    | Append `@ 14:03:07.042`.                                                       |
+| `showPineapple` | `true`                   |   x   |   x    | Put 🍍 in the title.                                                           |
+| `logErrors`     | `true`                   |   x   |   x    | Log failed actions, fetches and mutations.                                     |
+| `logger`        | `console`                |   x   |   x    | Any object with `log`, `group`, `groupCollapsed`, `groupEnd`.                  |
+| `showStoreName` | `true`                   |   x   |        | Put `[storeId]` in the title.                                                  |
+| `actions`       | all                      |   x   |        | Log only these action names.                                                   |
+| `filter`        | all                      |   x   |   x    | Store: `(action) => boolean`. Colada: `({ type, key }) => boolean`.            |
+
+State is copied when the action starts and when it ends, so the console shows both versions even when nested objects change. Plain objects and arrays are copied; `Map`, `Set`, `Date` and class instances are logged by reference.
+
+## Migrating from 1.x
+
+- All option names are unchanged.
+- `disabled` now defaults to `true` in production. Pass `disabled: false` to keep logging there.
+- The default export is gone: `import { PiniaLogger } from "pinia-logger"`.
+- The Nuxt module moved from `pinia-logger-nuxt` to `pinia-logger/nuxt`. Nuxt 2 and Nuxt Bridge are no longer supported.
+- Per-store `actions` is typed as `string[]`; the 1.x action-name type broke option-store type inference (seen with Pinia 4 and TypeScript 7).
+- `filter` now runs when the action starts, so a filtered action no longer copies state.
+- With `showDuration`, successful actions also show their duration. Failed actions read `failed in 12ms` instead of `failed after 12ms`.
+- The time is `HH:MM:SS.mmm` with zero-padded milliseconds, so the screenshot above shows the 1.x format.
+- The `action` row shows `args` as an array and adds `result` when the action returns a value.
+
+## Changelog
+
+See [CHANGELOG.md](CHANGELOG.md).

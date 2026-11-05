@@ -1,48 +1,70 @@
 {
   "name": "pinia-logger",
-  "version": "1.3.14",
-  "description": "Lightweight logger for Pinia",
-  "main": "index.js",
-  "types": "index.d.ts",
+  "version": "2.0.0",
+  "description": "Console logger for Pinia actions and Pinia Colada queries and mutations",
   "keywords": [
-    "pinia",
-    "store",
-    "vuex",
-    "logger",
-    "log",
     "console",
-    "typescript",
+    "devtools",
+    "logger",
     "nuxt",
+    "pinia",
+    "pinia-colada",
     "vue"
   ],
+  "homepage": "https://github.com/cwdx/pinia-logger#readme",
+  "bugs": "https://github.com/cwdx/pinia-logger/issues",
+  "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "https://github.com/cwdx/pinia-logger"
+    "url": "git+https://github.com/cwdx/pinia-logger.git"
+  },
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.cts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./colada": {
+      "import": "./dist/colada.mjs",
+      "require": "./dist/colada.cjs"
+    },
+    "./nuxt": "./dist/nuxt.mjs",
+    "./package.json": "./package.json"
   },
   "scripts": {
-    "dev": "cd tests && npm run dev",
-    "lint": "eslint --ext .js,.ts,.vue src tests --fix && prettier --write src tests",
-    "build": "npm run lint && tsc -p . && cp package.json dist && cp README.md dist && cp README-nuxt.md dist",
-    "build:nuxt": "rm -rf packages/nuxt && mkdir -p packages/nuxt && npm run build && cp dist/nuxt.js packages/nuxt/index.js && cp dist/nuxt.d.ts packages/nuxt/index.d.ts && cp dist/nuxt.js.map packages/nuxt/index.js.map && cp README.md packages/nuxt/README.md && cp package.json packages/nuxt/package.json",
-    "install:tests": "cd tests && npm install",
-    "deploy": "npm run build && cd dist && npm publish"
+    "build": "tsdown",
+    "typecheck": "tsc --noEmit",
+    "lint": "oxlint --deny-warnings && oxfmt --check",
+    "format": "oxfmt",
+    "check": "node tests/consumer.ts && NODE_ENV=production node tests/consumer.ts",
+    "prepublishOnly": "bun run lint && bun run typecheck && bun run build && bun run check"
   },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {},
   "devDependencies": {
-    "@nuxt/types": "^2.16.3",
-    "@rushstack/eslint-patch": "^1.2.0",
-    "@typescript-eslint/eslint-plugin": "^5.48.1",
-    "@typescript-eslint/parser": "^5.48.1",
-    "@vue/eslint-config-prettier": "^7.0.0",
-    "@vue/eslint-config-typescript": "^11.0.2",
-    "eslint": "^8.32.0",
-    "eslint-plugin-vue": "^9.9.0",
-    "nuxt": "^3.4.0",
-    "pinia": "^2.0.29",
-    "pinia-logger": "^1.3.11",
-    "prettier": "^2.8.3",
-    "typescript": "^4.9.4"
+    "@nuxt/schema": "4.6.4",
+    "@pinia/colada": "1.4.9",
+    "@types/node": "^26.6.6",
+    "oxfmt": "^0.75.0",
+    "oxlint": "^1.90.0",
+    "pinia": "4.1.0",
+    "tsdown": "^0.23.4",
+    "typescript": "7.0.2",
+    "vue": "3.5.44"
+  },
+  "peerDependencies": {
+    "@pinia/colada": ">=0.12.0 <2",
+    "pinia": "^2.0.0 || ^3.0.0 || ^4.0.0",
+    "vue": "^2.7.0 || ^3.2.0"
+  },
+  "peerDependenciesMeta": {
+    "@pinia/colada": {
+      "optional": true
+    }
   }
 }

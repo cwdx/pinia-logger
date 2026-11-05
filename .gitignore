@@ -1,6 +1,4 @@
 /node_modules
-.env
 /dist
+*.tgz
 .DS_Store
-/test/node_modules
-/test/dist
