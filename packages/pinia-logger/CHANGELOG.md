@@ -1,5 +1,17 @@
 # Changelog
 
+## 2.1.0
+
+Found while integrating into a Nuxt 4 app.
+
+New: sanitize
+
+- `sanitize: (value, { kind, key }) => value` on both loggers rewrites every logged payload (state, action arguments, results, query data, mutation variables and data), for example to redact passwords and secrets. The README shows a field redactor and says plainly not to enable the logger in production for apps that handle secrets.
+
+Fixed: Nuxt module types
+
+- Adding `pinia-logger/nuxt` to `modules` no longer turns every injected property (`$router` and the app's own `provide`s) into `unknown`. The runtime plugin now ships `nuxt-plugin.d.mts`; without it, Nuxt's generated plugin types imported an untyped JavaScript file from `node_modules`, and the injection types collapsed.
+
 ## 2.0.1
 
 - The package ships its `LICENSE` file.
