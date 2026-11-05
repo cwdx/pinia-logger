@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.0.1
+
+- The package ships its `LICENSE` file.
+- `author` and the `pinia-plugin`, `pinia-colada-plugin` and `nuxt-module` keywords are set.
+- The Nuxt module declares `compatibility: { nuxt: ">=3.0.0" }`.
+- The repository is a monorepo; the package lives in `packages/pinia-logger`.
+
 ## 2.0.0
 
 Breaking:

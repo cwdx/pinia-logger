@@ -1,0 +1,23 @@
+{
+  "name": "playground",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1 --port 5199",
+    "build": "vite build --base ./",
+    "typecheck": "tsc --noEmit",
+    "lint": "oxlint --deny-warnings && oxfmt --check",
+    "screenshots": "node scripts/screenshots.ts"
+  },
+  "dependencies": {
+    "@pinia/colada": "1.4.9",
+    "pinia": "4.1.0",
+    "pinia-logger": "workspace:*",
+    "vue": "3.5.44"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.6",
+    "playwright": "1.64.1",
+    "vite": "^8.3.5"
+  }
+}

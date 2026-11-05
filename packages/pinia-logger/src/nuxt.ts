@@ -17,7 +17,11 @@ const setup = (inlineOptions: PiniaLoggerOptions, nuxt: Nuxt): void => {
 };
 
 const PiniaLoggerNuxt: NuxtModule<PiniaLoggerOptions> = Object.assign(setup, {
-  getMeta: async () => ({ name: "pinia-logger", configKey: "piniaLogger" }),
+  getMeta: async () => ({
+    name: "pinia-logger",
+    configKey: "piniaLogger",
+    compatibility: { nuxt: ">=3.0.0" },
+  }),
 });
 
 export default PiniaLoggerNuxt;
