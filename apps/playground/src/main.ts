@@ -64,6 +64,6 @@ const App = defineComponent(() => {
 });
 
 createApp(App)
-  .use(createPinia().use(PiniaLogger({ showDuration: true, logger })))
-  .use(PiniaColada, { plugins: [PiniaColadaLogger({ logger })] })
+  .use(createPinia().use(PiniaLogger({ showDuration: true, logger, disabled: false })))
+  .use(PiniaColada, { plugins: [PiniaColadaLogger({ logger, disabled: false })] })
   .mount("#app");
