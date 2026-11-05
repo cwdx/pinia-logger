@@ -1,5 +1,5 @@
 import * as colada from "@pinia/colada";
-import { print, resolveOptions, snapshot, type LoggerOptions, type Row } from "./shared";
+import { capture, print, resolveOptions, type LoggerOptions, type Row } from "./shared";
 
 export type ColadaLogEventType = "fetch" | "hit" | "set" | "invalidate" | "remove" | "mutate";
 
@@ -48,22 +48,44 @@ export const PiniaColadaLogger =
       const entry = args[0] as Entry;
       const start = performance.now();
       if (name === "fetch") {
-        after((state) => log("fetch", entry.key, [["state", "#4caf50", snapshot(state)]], start));
+        after((state) =>
+          log(
+            "fetch",
+            entry.key,
+            [["state", "#4caf50", capture(options, state, "query-data", entry.key)]],
+            start,
+          ),
+        );
         if (!options.logErrors) return;
         onError((error) => {
           const failed = entry.state.value.error === error ? "failed" : "cancelled";
           log("fetch", entry.key, [["error", "#ed4981", error]], start, failed);
         });
       } else if (name === "refresh" && !entry.stale && !entry.state.value.error) {
-        log("hit", entry.key, [["data", "#69B7FF", snapshot(entry.state.value.data)]]);
+        log("hit", entry.key, [
+          ["data", "#69B7FF", capture(options, entry.state.value.data, "query-data", entry.key)],
+        ]);
       } else if (name === "invalidate" || name === "remove") {
         log(name, entry.key, []);
       } else if (name === "setQueryData") {
-        after(() => log("set", args[0] as unknown[], [["data", "#69B7FF", snapshot(args[1])]]));
+        after(() =>
+          log("set", args[0] as unknown[], [
+            ["data", "#69B7FF", capture(options, args[1], "query-data", args[0])],
+          ]),
+        );
       } else if (name === "mutate") {
-        const vars: Row = ["vars", "grey", snapshot(args.length > 1 ? args[1] : entry.vars)];
+        const vars: Row = [
+          "vars",
+          "grey",
+          capture(options, args.length > 1 ? args[1] : entry.vars, "mutation-vars", entry.key),
+        ];
         after((data) =>
-          log("mutate", entry.key, [vars, ["data", "#4caf50", snapshot(data)]], start),
+          log(
+            "mutate",
+            entry.key,
+            [vars, ["data", "#4caf50", capture(options, data, "mutation-data", entry.key)]],
+            start,
+          ),
         );
         if (!options.logErrors) return;
         onError((error) =>

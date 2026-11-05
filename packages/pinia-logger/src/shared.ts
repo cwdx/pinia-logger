@@ -4,6 +4,16 @@ export type Row = [label: string, color: string, value: unknown];
 
 export type Logger = Pick<Console, "log" | "group" | "groupCollapsed" | "groupEnd">;
 
+export type SanitizeKind =
+  | "state"
+  | "action-args"
+  | "result"
+  | "query-data"
+  | "mutation-vars"
+  | "mutation-data";
+
+export type Sanitize = (value: unknown, info: { kind: SanitizeKind; key?: unknown }) => unknown;
+
 export interface LoggerOptions {
   disabled?: boolean;
   expanded?: boolean;
@@ -12,6 +22,7 @@ export interface LoggerOptions {
   showPineapple?: boolean;
   logErrors?: boolean;
   logger?: Logger;
+  sanitize?: Sanitize;
 }
 
 const isProduction = (): boolean => {
@@ -35,6 +46,7 @@ export const resolveOptions = <T extends LoggerOptions>(
     ...options,
     disabled: options.disabled ?? isProduction(),
     logger: options.logger ?? console,
+    sanitize: options.sanitize ?? ((value) => value),
   };
 };
 
@@ -90,3 +102,10 @@ export const snapshot = (
   for (const [key, item] of Object.entries(raw)) copy[key] = snapshot(item, seen);
   return copy;
 };
+
+export const capture = (
+  options: Required<LoggerOptions>,
+  value: unknown,
+  kind: SanitizeKind,
+  key?: unknown,
+): unknown => options.sanitize(snapshot(value), { kind, key });
