@@ -98,7 +98,7 @@ export default defineNuxtConfig({
 });
 ```
 
-The logger runs in the browser only. Options pass through the public runtime config, so `filter` and `logger` (functions) cannot be set here; use per-store options instead.
+The logger runs in the browser only. Options pass through the public runtime config, so `filter`, `logger` and `sanitize` (functions) cannot be set here; use per-store options instead.
 
 ![A store action in a Nuxt 4 app](https://raw.githubusercontent.com/cwdx/pinia-logger/main/docs/nuxt.png)
 
@@ -116,8 +116,30 @@ The logger runs in the browser only. Options pass through the public runtime con
 | `showStoreName` | `true`                   |   x   |        | Put `[storeId]` in the title.                                                  |
 | `actions`       | all                      |   x   |        | Log only these action names.                                                   |
 | `filter`        | all                      |   x   |   x    | Store: `(action) => boolean`. Colada: `({ type, key }) => boolean`.            |
+| `sanitize`      | none                     |   x   |   x    | `(value, { kind, key }) => value`, applied to every logged payload.            |
 
 State is copied when the action starts and when it ends, so the console shows both versions even when nested objects change. Plain objects and arrays are copied; `Map`, `Set`, `Date` and class instances are logged by reference.
+
+## Secrets
+
+The logger prints state, action arguments and results, query data and mutation variables. Do not enable it in production for apps that handle secrets. In development, `sanitize` rewrites each payload before it is logged. It receives a copy of plain objects and arrays, so it may change them in place; `kind` is one of `state`, `action-args`, `result`, `query-data`, `mutation-vars`, `mutation-data`, and `key` is the store id, action name or query key.
+
+```ts
+const hidden = /password|secret|hint/i;
+const redact = (value: unknown, seen = new WeakSet<object>()): unknown => {
+  if (!value || typeof value !== "object" || seen.has(value)) return value;
+  if (!Array.isArray(value) && Object.getPrototypeOf(value) !== Object.prototype) return value;
+  seen.add(value);
+  for (const [key, item] of Object.entries(value))
+    Object.assign(value, { [key]: hidden.test(key) ? "[redacted]" : redact(item, seen) });
+  return value;
+};
+
+pinia.use(PiniaLogger({ sanitize: (value) => redact(value) }));
+app.use(PiniaColada, { plugins: [PiniaColadaLogger({ sanitize: (value) => redact(value) })] });
+```
+
+To hide a whole payload, return a placeholder: `sanitize: (value, { kind }) => (kind === "mutation-vars" ? "[hidden]" : value)`. Colada's `filter` drops an event entirely.
 
 ## Migrating from 1.x
 

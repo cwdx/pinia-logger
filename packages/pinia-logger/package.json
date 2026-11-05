@@ -1,6 +1,6 @@
 {
   "name": "pinia-logger",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "description": "Console logger for Pinia actions and Pinia Colada queries and mutations",
   "keywords": [
     "console",

@@ -1,11 +1,28 @@
 import assert from "node:assert/strict";
+import { inspect } from "node:util";
 import * as Vue from "vue";
 import { createPinia, defineStore, setActivePinia } from "pinia";
 import { PiniaLogger } from "pinia-logger";
 
 const titles: string[] = [];
+const logged: unknown[] = [];
+const kinds = new Set<string>();
+const redact = (value: unknown, seen = new WeakSet<object>()): void => {
+  if (typeof value !== "object" || value === null || seen.has(value)) return;
+  seen.add(value);
+  for (const [key, item] of Object.entries(value)) {
+    if (key === "password") Object.assign(value, { [key]: "[redacted]" });
+    else redact(item, seen);
+  }
+};
+const sanitize = (value: unknown, { kind }: { kind: string }): unknown => {
+  kinds.add(kind);
+  redact(value);
+  return value;
+};
 const logger = {
   ...console,
+  log: (...args: unknown[]) => (logged.push(...args), console.log(...args)),
   group: (title: string, ...rest: unknown[]) => (titles.push(title), console.group(title, ...rest)),
   groupCollapsed: (title: string, ...rest: unknown[]) => (
     titles.push(title),
@@ -20,6 +37,7 @@ pinia.use(
     showDuration: true,
     filter: ({ name }) => name !== "incrementCounter",
     logger,
+    sanitize,
   }),
 );
 
@@ -29,12 +47,13 @@ else setActivePinia(pinia);
 const colada = app && (await import("@pinia/colada").catch(() => undefined));
 if (colada) {
   const { PiniaColadaLogger } = await import("pinia-logger/colada");
-  app.use(colada.PiniaColada, { plugins: [PiniaColadaLogger({ logger })] });
+  app.use(colada.PiniaColada, { plugins: [PiniaColadaLogger({ logger, sanitize })] });
 }
 
 const useCounterStore = defineStore("counter", {
   state: () => ({
     counter: 0,
+    password: "hunter2",
     balance: 10n ** 18n,
     nested: { items: [1] } as { items: number[]; self?: unknown },
   }),
@@ -112,6 +131,11 @@ if (app && colada) {
       await queryCache.invalidateQueries({ key: ["todos"] });
       await broken.refresh();
       assert.equal(await mutateAsync(21), 42);
+      const login = useMutation({
+        key: ["login"],
+        mutation: async (vars: { user: string; password: string }) => ({ password: vars.password }),
+      });
+      await login.mutateAsync({ user: "ada", password: "hunter2" });
     }),
   );
 }
@@ -144,6 +168,13 @@ for (const pattern of expected)
     `missing log: ${pattern}\n${seen.join("\n")}`,
   );
 if (production) assert.equal(titles.length, 0);
+assert.ok(!inspect(logged, { depth: null }).includes("hunter2"), "password leaked to the log");
+const expectedKinds = production
+  ? []
+  : ["state", "action-args", "result", ...(colada ? ["query-data"] : [])];
+if (!production && colada && "useMutationCache" in colada)
+  expectedKinds.push("mutation-vars", "mutation-data");
+for (const kind of expectedKinds) assert.ok(kinds.has(kind), `sanitize missed ${kind}`);
 assert.ok(!seen.some((title) => title.includes("incrementCounter") || title.includes("silent")));
 console.log(
   `\nconsumer check passed: ${titles.length} groups, colada ${colada ? "on" : "off"}${production ? ", production" : ""}`,

@@ -4,9 +4,9 @@ import type {
   _ActionsTree,
   _StoreOnActionListenerContext,
 } from "pinia";
-import { print, resolveOptions, snapshot, type LoggerOptions } from "./shared";
+import { capture, print, resolveOptions, type LoggerOptions } from "./shared";
 
-export type { Logger, LoggerOptions } from "./shared";
+export type { Logger, LoggerOptions, Sanitize, SanitizeKind } from "./shared";
 
 export type PiniaActionListenerContext = _StoreOnActionListenerContext<
   StoreGeneric,
@@ -44,7 +44,7 @@ export const PiniaLogger =
       if (options.filter && !options.filter(action)) return;
 
       const start = performance.now();
-      const prevState = snapshot(store.$state);
+      const prevState = capture(options, store.$state, "state", store.$id);
       const log = (extra: object, failed?: string) =>
         print(
           options,
@@ -57,18 +57,22 @@ export const PiniaLogger =
               "#69B7FF",
               {
                 type: action.name,
-                args: snapshot(action.args),
+                args: capture(options, action.args, "action-args", action.name),
                 ...(options.showStoreName && { store: store.$id }),
                 ...extra,
               },
             ],
-            ["next state", "#4caf50", snapshot(store.$state)],
+            ["next state", "#4caf50", capture(options, store.$state, "state", store.$id)],
           ],
           start,
           failed,
         );
 
-      action.after((result: unknown) => log(result === undefined ? {} : { result }));
+      action.after((result: unknown) =>
+        log(
+          result === undefined ? {} : { result: capture(options, result, "result", action.name) },
+        ),
+      );
       if (options.logErrors) action.onError((error) => log({ error }, "failed"));
     });
   };

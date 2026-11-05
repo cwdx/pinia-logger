@@ -19,7 +19,7 @@ export default defineConfig([
     entry: "src/nuxt-plugin.ts",
     target: "es2020",
     minify: true,
-    dts: false,
+    dts: true,
     deps: { neverBundle: ["#app", "pinia-logger"] },
   },
 ]);
