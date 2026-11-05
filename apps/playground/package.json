@@ -7,7 +7,8 @@
     "build": "vite build --base ./",
     "typecheck": "tsc --noEmit",
     "lint": "oxlint --deny-warnings && oxfmt --check",
-    "screenshots": "node scripts/screenshots.ts"
+    "screenshots": "node scripts/screenshots.ts",
+    "demo-video": "node scripts/demo-video.ts"
   },
   "dependencies": {
     "@pinia/colada": "1.4.9",

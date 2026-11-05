@@ -4,6 +4,8 @@ Logs Pinia actions to the console: the state before, the action with its argumen
 
 Live demo: https://cwdx.github.io/pinia-logger/
 
+![Demo: clicking through a store action, queries and a mutation](https://raw.githubusercontent.com/cwdx/pinia-logger/main/docs/demo.gif)
+
 ![A store action in the console](https://raw.githubusercontent.com/cwdx/pinia-logger/main/docs/store.png)
 
 ## Install
