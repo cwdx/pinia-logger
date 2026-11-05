@@ -1,4 +1,7 @@
-/node_modules
-/dist
+node_modules/
+dist/
+.turbo/
 *.tgz
 .DS_Store
+.nuxt/
+.output/

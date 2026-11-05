@@ -1,0 +1,16 @@
+{
+  "name": "nuxt-playground",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "nuxt dev --host 127.0.0.1 --port 5198",
+    "lint": "oxlint --deny-warnings && oxfmt --check"
+  },
+  "dependencies": {
+    "@pinia/nuxt": "1.0.3",
+    "nuxt": "4.6.4",
+    "pinia": "4.1.0",
+    "pinia-logger": "workspace:*",
+    "vue": "3.5.44"
+  }
+}
