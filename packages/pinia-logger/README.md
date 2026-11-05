@@ -129,6 +129,10 @@ State is copied when the action starts and when it ends, so the console shows bo
 - The time is `HH:MM:SS.mmm` with zero-padded milliseconds.
 - The `action` row shows `args` as an array and adds `result` when the action returns a value.
 
+## Contributing
+
+Issues and pull requests are welcome at https://github.com/cwdx/pinia-logger. Run `bun install`, then `bunx turbo run lint typecheck build check` at the repository root.
+
 ## Changelog
 
 See [CHANGELOG.md](CHANGELOG.md).
